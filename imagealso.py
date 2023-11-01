@@ -50,7 +50,7 @@ import json
 import numpy as np  # Import numpy for working with int64 data types
 
 def generateIngredients(input_ingredients):
-    input_ingredients = [ingredient.strip() for ingredient in input_ingredients.split()]
+    input_ingredients = [ingredient.strip() for ingredient in input_ingredients.split(',')]
 
     # Step 5: Recommend recipes based on the input ingredients
     result = recommend_recipes(input_ingredients)
@@ -90,7 +90,7 @@ def get_file_name_from_path(file_path):
 
 from flask import Flask, jsonify,request,send_from_directory
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 
 @app.route('/images/<path:filename>')
@@ -101,24 +101,23 @@ def serve_image(filename):
 def api_recommend_recipes():
     data = request.get_json()  # Get JSON data from the request
     message = "None"
-    if data:
-        res = data['ingredients']
-        res = generateIngredients(res)
+    if data and 'ingredients' in data:
+        ingredients_list = data['ingredients']  # Assuming 'ingredients' is a list in the JSON data
+        res = generateIngredients(ingredients_list)
         message = "success"
     else:
-        message = "please put ingredients in request body"
+        message = "Please provide ingredients in the request body."
         res = []
 
     response = {
-        "message":message,
-        "response":res
+        "message": message,
+        "response": res
     }
 
     return jsonify(response)
 
 
 
-if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0')
 
-
+if _name_ == '_main_':
+    app.run(debug=True)
